@@ -1,0 +1,1 @@
+INSERT INTO public.department (department_name) VALUES ("my-dep-1");

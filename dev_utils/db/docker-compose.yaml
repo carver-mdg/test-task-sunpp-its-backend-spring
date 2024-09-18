@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  oracle_db:
+    container_name: "oracle-21.3.0-xe"
+    image: "oracle-db-xe:21.3.0"
+    environment:
+      ORACLE_PWD: "password"
+    ports:
+      - "9521:1521"
+      - "9550:5500"
+      - "9484:2484"
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - ./oradata:/opt/oracle/oradata
+      - ./cfgtoollogs:/opt/oracle/cfgtoollogs
+      #    deploy:
+      #      resources:
+      #        limits:
+      #          cpus: '1'
+      #          memory: 2048M
+    networks:
+      - oracle_db
+
+networks:
+  oracle_db:
+    driver: bridge

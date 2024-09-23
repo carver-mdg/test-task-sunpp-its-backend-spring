@@ -25,6 +25,14 @@ public class DepartmentService {
      *
      * @return
      */
+    public DepartmentEntity getDepartmentByID(Integer id) {
+        return this.departmentRepository.findById(id).orElseThrow();
+    }
+
+    /**
+     *
+     * @return
+     */
     public List<DepartmentEntity> getDepartmentList() {
         return this.departmentRepository.findAll();
     }

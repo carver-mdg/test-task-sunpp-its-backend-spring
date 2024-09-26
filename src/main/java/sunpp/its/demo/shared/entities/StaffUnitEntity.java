@@ -16,7 +16,7 @@ public class StaffUnitEntity {
     @Column(name = "StaffUnitID")
     private Integer StaffUnitID;
 
-    @Column(name = "StaffUnitName", unique = true)
+    @Column(name = "StaffUnitName")
     private String StaffUnitName;
 
     @ManyToOne

@@ -19,7 +19,7 @@ public class EmployeeEntity {
     @Column(name = "FullName", unique = true)
     private String FullName;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "StaffUnitID")
     private StaffUnitEntity staffUnit;
 }

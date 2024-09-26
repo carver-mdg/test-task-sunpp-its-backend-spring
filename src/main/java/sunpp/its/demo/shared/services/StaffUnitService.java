@@ -8,6 +8,7 @@ import sunpp.its.demo.controllers.staffunit.dto.StaffUnitResponseDTO;
 import sunpp.its.demo.controllers.staffunit.dto.UpdateStaffUnitRequestDTO;
 import sunpp.its.demo.shared.entities.DepartmentEntity;
 import sunpp.its.demo.shared.entities.StaffUnitEntity;
+import sunpp.its.demo.shared.repositories.DepartmentRepository;
 import sunpp.its.demo.shared.repositories.StaffUnitRepository;
 
 import java.util.LinkedList;
@@ -18,7 +19,7 @@ public class StaffUnitService {
     @Autowired
     private StaffUnitRepository staffUnitRepository;
     @Autowired
-    private DepartmentService departmentService;
+    private DepartmentRepository departmentRepository;
 
 
     /**
@@ -40,7 +41,7 @@ public class StaffUnitService {
      * @return DTO
      */
     public StaffUnitResponseDTO createStaffUnit(CreateStaffUnitRequestDTO suReqDTO) {
-        DepartmentEntity department = this.departmentService.getDepartmentByID(suReqDTO.getDepartmentID());
+        DepartmentEntity department = this.departmentRepository.findById(suReqDTO.getDepartmentID()).orElseThrow();
 
         StaffUnitEntity staffUnit = new StaffUnitEntity();
         staffUnit.setStaffUnitName(suReqDTO.getStaffUnitName());
@@ -65,7 +66,7 @@ public class StaffUnitService {
         StaffUnitEntity entity = new StaffUnitEntity();
         entity.setStaffUnitID(suReqDTO.getStaffUnitID());
         entity.setStaffUnitName(suReqDTO.getStaffUnitName());
-        entity.setDepartment(this.departmentService.getDepartmentByID(suReqDTO.getDepartmentID()));
+        entity.setDepartment(this.departmentRepository.findById(suReqDTO.getDepartmentID()).orElseThrow());
 
         this.staffUnitRepository.save(entity);
         return StaffUnitResponseDTO.convertEntityToDTO(entity);

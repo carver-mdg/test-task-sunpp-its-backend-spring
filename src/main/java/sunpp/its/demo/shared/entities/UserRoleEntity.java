@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "UserRole")
+@Table(name = "TypeUserRoleInService")
 public class UserRoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "RoleID")
-    private Integer RoleID;
+    @Column(name = "roleID")
+    private Integer roleID;
 
-    @Column(name = "RoleName", unique = true)
-    private String RoleName;
+    @Column(name = "roleName", unique = true)
+    private String roleName;
 }

@@ -6,4 +6,5 @@ import sunpp.its.demo.shared.entities.UserRoleEntity;
 
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Integer> {
+    Boolean existsByRoleName(String roleName);
 }

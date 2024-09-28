@@ -42,3 +42,42 @@ GRANT UNLIMITED TABLESPACE TO c##sit;
 
 В режиме production для телефона:
 ```java -jar -Dspring.profiles.active=prod-phone demo-app.jar```
+
+
+## RestAPI
+| HTTP Method | url                              | desc                                     |
+|-------------|----------------------------------|------------------------------------------|
+| GET         | /api/v1/departments              | Get all                                  |
+| POST        | /api/v1/departments              | Create                                   |
+| PUT         | /api/v1/departments/{id}         | Update                                   |
+| DELETE      | /api/v1/departments/{id}         | Delete                                   |
+|             |                                  |                                          |
+| GET         | /api/v1/staff-units              | Get all                                  |
+| POST        | /api/v1/staff-units              | Create                                   |
+| PUT         | /api/v1/staff-units/{id}         | Update                                   |
+| DELETE      | /api/v1/staff-units/{id}         | Delete                                   |
+|             |                                  |                                          |
+| GET         | /api/v1/employees                | Get all                                  |
+| POST        | /api/v1/employees                | Create                                   |
+| PUT         | /api/v1/employees/{id}           | Update                                   |
+| DELETE      | /api/v1/employees/{id}           | Delete                                   |
+|             |                                  |                                          |
+| GET         | /api/v1/users                    | Get all                                  |
+| POST        | /api/v1/users                    | Create                                   |
+| PUT         | /api/v1/users/{id}               | Update                                   |
+| DELETE      | /api/v1/users/{id}               | Delete                                   |
+|             |                                  |                                          |
+|             |                                  |                                          |
+|             |                                  |                                          |
+|             |                                  |                                          |
+|             |                                  |                                          |
+|             |                                  |                                          |
+|             |                                  |                                          |
+|             |                                  |                                          |
+|             |                                  |                                          |
+|             |                                  |                                          |
+|             |                                  |                                          |
+|             |                                  |                                          |
+|             |                                  |                                          |
+| POST        | /api/v1/admin-sys/fill-mock-data | Send command to fill tables by mock data |
+| POST        | /api/v1/admin-sys/truncate-db    | Send command to truncate database        |

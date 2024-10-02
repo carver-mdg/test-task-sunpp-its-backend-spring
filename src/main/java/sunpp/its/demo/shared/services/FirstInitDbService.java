@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import sunpp.its.demo.shared.entities.*;
+import sunpp.its.demo.shared.entities.service.TypeUserRoleInServiceEntity;
 import sunpp.its.demo.shared.repositories.*;
 
 import java.util.List;
@@ -85,7 +86,7 @@ public class FirstInitDbService {
         for (var employee : employeeEntities) {
             try {
                 UserEntity userEntity = new UserEntity();
-                userEntity.setLogin(String.format("l%d", employee.getEmployeeID()));
+                userEntity.setLogin(String.format("login-%d", employee.getEmployeeID()));
                 userEntity.setPassword(String.format("p%d", employee.getEmployeeID()));
                 userEntity.setEmployee(employee);
                 this.userRepository.save(userEntity);
@@ -113,7 +114,7 @@ public class FirstInitDbService {
                 if(this.userRoleRepository.existsByRoleName(typeUserRoleService))
                     continue;
 
-                UserRoleEntity userRoleEntity = new UserRoleEntity();
+                TypeUserRoleInServiceEntity userRoleEntity = new TypeUserRoleInServiceEntity();
                 userRoleEntity.setRoleName(typeUserRoleService);
                 this.userRoleRepository.save(userRoleEntity);
             } catch (DataAccessException ignored) {

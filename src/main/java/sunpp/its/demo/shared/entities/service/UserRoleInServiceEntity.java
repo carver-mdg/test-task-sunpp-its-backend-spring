@@ -1,4 +1,4 @@
-package sunpp.its.demo.shared.entities;
+package sunpp.its.demo.shared.entities.service;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "TypeUserRoleInService")
-public class UserRoleEntity {
+@Table(name = "UserRoleInService")
+public class UserRoleInServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roleID")
-    private Integer roleID;
+    @Column(name = "roleId")
+    private Integer roleId;
 
     @Column(name = "roleName", unique = true)
     private String roleName;

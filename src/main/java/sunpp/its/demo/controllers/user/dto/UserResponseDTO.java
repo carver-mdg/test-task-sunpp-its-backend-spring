@@ -21,9 +21,9 @@ public class UserResponseDTO {
      */
     public static UserResponseDTO convertEntityToDTO (UserEntity userEntity) {
         UserResponseDTO response = new UserResponseDTO();
-        response.setUserID(userEntity.getUserID());
+        response.setUserID(userEntity.getUserId());
         response.setLogin(userEntity.getLogin());
-        response.setEmployeeID(userEntity.getEmployee().getEmployeeID());
+        response.setEmployeeID(userEntity.getEmployee().getEmployeeId());
         return response;
     }
 }

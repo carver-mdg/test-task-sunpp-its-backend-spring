@@ -46,9 +46,9 @@ public class EmployeeService {
         this.employeeRepository.save(employeeEntity);
 
         EmployeeResponseDTO responseDTO = new EmployeeResponseDTO();
-        responseDTO.setEmployeeID(employeeEntity.getEmployeeID());
+        responseDTO.setEmployeeID(employeeEntity.getEmployeeId());
         responseDTO.setFullName(employeeEntity.getFullName());
-        responseDTO.setStaffUnitID(employeeEntity.getStaffUnit().getStaffUnitID());
+        responseDTO.setStaffUnitID(employeeEntity.getStaffUnit().getStaffUnitId());
 
         return responseDTO;
     }
@@ -63,7 +63,7 @@ public class EmployeeService {
         this.employeeRepository.findById(eReqDTO.getEmployeeID()).orElseThrow(EntityNotFoundException::new);
 
         EmployeeEntity employeeEntity = new EmployeeEntity();
-        employeeEntity.setEmployeeID(eReqDTO.getEmployeeID());
+        employeeEntity.setEmployeeId(eReqDTO.getEmployeeID());
         employeeEntity.setFullName(eReqDTO.getFullName());
         employeeEntity.setStaffUnit(this.staffUnitRepository.findById(eReqDTO.getStaffUnitID()).orElseThrow());
 

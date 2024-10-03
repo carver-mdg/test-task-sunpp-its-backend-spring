@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import sunpp.its.demo.shared.entities.*;
-import sunpp.its.demo.shared.entities.service.TypeUserRoleInServiceEntity;
+import sunpp.its.demo.shared.entities.service.UserRoleInServiceEntity;
 import sunpp.its.demo.shared.repositories.*;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class FirstInitDbService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserRoleRepository userRoleRepository;
+    private UserRoleInServiceRepository userRoleInServiceRepository;
 
     /**
      *
@@ -86,8 +86,8 @@ public class FirstInitDbService {
         for (var employee : employeeEntities) {
             try {
                 UserEntity userEntity = new UserEntity();
-                userEntity.setLogin(String.format("login-%d", employee.getEmployeeID()));
-                userEntity.setPassword(String.format("p%d", employee.getEmployeeID()));
+                userEntity.setLogin(String.format("login-%d", employee.getEmployeeId()));
+                userEntity.setPassword(String.format("p%d", employee.getEmployeeId()));
                 userEntity.setEmployee(employee);
                 this.userRepository.save(userEntity);
             } catch (DataAccessException ignored) {
@@ -111,12 +111,12 @@ public class FirstInitDbService {
     private void createTypeUserRoleInService() {
         for (var typeUserRoleService : new String[]{"user", "owner", "admin"}) {
             try {
-                if(this.userRoleRepository.existsByRoleName(typeUserRoleService))
+                if(this.userRoleInServiceRepository.existsByRoleName(typeUserRoleService))
                     continue;
 
-                TypeUserRoleInServiceEntity userRoleEntity = new TypeUserRoleInServiceEntity();
+                UserRoleInServiceEntity userRoleEntity = new UserRoleInServiceEntity();
                 userRoleEntity.setRoleName(typeUserRoleService);
-                this.userRoleRepository.save(userRoleEntity);
+                this.userRoleInServiceRepository.save(userRoleEntity);
             } catch (DataAccessException ignored) {
             }
         }

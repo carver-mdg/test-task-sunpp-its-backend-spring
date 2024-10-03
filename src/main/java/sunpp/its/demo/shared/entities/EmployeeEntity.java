@@ -15,14 +15,14 @@ import org.hibernate.annotations.OnDeleteAction;
 public class EmployeeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "employeeID")
-    private Integer employeeID;
+    @Column(name = "employeeId")
+    private Integer employeeId;
 
     @Column(name = "fullName", unique = true)
     private String fullName;
 
     @ManyToOne
-    @JoinColumn(name = "staffUnitID")
+    @JoinColumn(name = "staffUnitId")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private StaffUnitEntity staffUnit;
 }

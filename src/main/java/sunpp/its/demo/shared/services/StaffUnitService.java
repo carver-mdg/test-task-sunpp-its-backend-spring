@@ -49,8 +49,8 @@ public class StaffUnitService {
         staffUnit = this.staffUnitRepository.save(staffUnit);
 
         StaffUnitResponseDTO responseDTO = new StaffUnitResponseDTO();
-        responseDTO.setDepartmentID(department.getDepartmentID());
-        responseDTO.setStaffUnitID(staffUnit.getStaffUnitID());
+        responseDTO.setDepartmentID(department.getDepartmentId());
+        responseDTO.setStaffUnitID(staffUnit.getStaffUnitId());
         responseDTO.setStaffUnitName(staffUnit.getStaffUnitName());
 
         return responseDTO;
@@ -64,7 +64,7 @@ public class StaffUnitService {
      */
     public StaffUnitResponseDTO updateStaffUnit(UpdateStaffUnitRequestDTO suReqDTO) {
         StaffUnitEntity entity = new StaffUnitEntity();
-        entity.setStaffUnitID(suReqDTO.getStaffUnitID());
+        entity.setStaffUnitId(suReqDTO.getStaffUnitID());
         entity.setStaffUnitName(suReqDTO.getStaffUnitName());
         entity.setDepartment(this.departmentRepository.findById(suReqDTO.getDepartmentID()).orElseThrow());
 

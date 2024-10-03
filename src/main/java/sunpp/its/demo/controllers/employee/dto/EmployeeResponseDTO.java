@@ -21,9 +21,9 @@ public class EmployeeResponseDTO {
      */
     public static EmployeeResponseDTO convertEntityToDTO (EmployeeEntity employeeEntity) {
         EmployeeResponseDTO response = new EmployeeResponseDTO();
-        response.setEmployeeID(employeeEntity.getEmployeeID());
+        response.setEmployeeID(employeeEntity.getEmployeeId());
         response.setFullName(employeeEntity.getFullName());
-        response.setStaffUnitID(employeeEntity.getStaffUnit().getStaffUnitID());
+        response.setStaffUnitID(employeeEntity.getStaffUnit().getStaffUnitId());
         return response;
     }
 }

@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 public class DepartmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "departmentID")
-    private Integer departmentID;
+    @Column(name = "departmentId")
+    private Integer departmentId;
 
     @Column(name = "departmentName", unique = true)
     private String departmentName;

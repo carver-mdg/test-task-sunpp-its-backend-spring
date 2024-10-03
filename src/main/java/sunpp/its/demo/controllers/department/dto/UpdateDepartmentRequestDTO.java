@@ -21,7 +21,7 @@ public class UpdateDepartmentRequestDTO {
 
     public DepartmentEntity convertDTOToEntity () {
         DepartmentEntity entity = new DepartmentEntity();
-        entity.setDepartmentID(this.getDepartmentID());
+        entity.setDepartmentId(this.getDepartmentID());
         entity.setDepartmentName(this.getDepartmentName());
         return entity;
     }

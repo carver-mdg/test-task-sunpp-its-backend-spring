@@ -14,7 +14,7 @@ public class DepartmentResponseDTO {
 
     public static DepartmentResponseDTO convertEntityToDTO (DepartmentEntity departmentEntity) {
         DepartmentResponseDTO response = new DepartmentResponseDTO();
-        response.setDepartmentID(departmentEntity.getDepartmentID());
+        response.setDepartmentID(departmentEntity.getDepartmentId());
         response.setDepartmentName(departmentEntity.getDepartmentName());
         return response;
     }

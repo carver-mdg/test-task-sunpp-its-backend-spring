@@ -47,9 +47,9 @@ public class UserService {
         this.userRepository.save(userEntity);
 
         UserResponseDTO responseDTO = new UserResponseDTO();
-        responseDTO.setUserID(userEntity.getUserID());
+        responseDTO.setUserID(userEntity.getUserId());
         responseDTO.setLogin(userEntity.getLogin());
-        responseDTO.setEmployeeID(userEntity.getEmployee().getEmployeeID());
+        responseDTO.setEmployeeID(userEntity.getEmployee().getEmployeeId());
 
         return responseDTO;
     }
@@ -64,7 +64,7 @@ public class UserService {
         this.userRepository.findById(reqDTO.getUserID()).orElseThrow(EntityNotFoundException::new);
 
         UserEntity userEntity = new UserEntity();
-        userEntity.setUserID(reqDTO.getUserID());
+        userEntity.setUserId(reqDTO.getUserID());
         userEntity.setLogin(reqDTO.getLogin());
         userEntity.setPassword(reqDTO.getPassword());
         userEntity.setEmployee(this.employeeRepository.findById(reqDTO.getEmployeeID()).orElseThrow());

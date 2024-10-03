@@ -21,9 +21,9 @@ public class StaffUnitResponseDTO {
      */
     public static StaffUnitResponseDTO convertEntityToDTO (StaffUnitEntity staffUnitEntity) {
         StaffUnitResponseDTO response = new StaffUnitResponseDTO();
-        response.setStaffUnitID(staffUnitEntity.getStaffUnitID());
+        response.setStaffUnitID(staffUnitEntity.getStaffUnitId());
         response.setStaffUnitName(staffUnitEntity.getStaffUnitName());
-        response.setDepartmentID(staffUnitEntity.getDepartment().getDepartmentID());
+        response.setDepartmentID(staffUnitEntity.getDepartment().getDepartmentId());
         return response;
     }
 }

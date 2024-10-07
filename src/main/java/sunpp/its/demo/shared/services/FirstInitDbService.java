@@ -1,12 +1,16 @@
 package sunpp.its.demo.shared.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import sunpp.its.demo.shared.entities.*;
-import sunpp.its.demo.shared.entities.service.UserRoleInServiceEntity;
+import sunpp.its.demo.shared.entities.service.ServiceEntity;
+import sunpp.its.demo.shared.entities.service.ServiceUserEntity;
+import sunpp.its.demo.shared.entities.service.TypeUserRoleInServiceEntity;
 import sunpp.its.demo.shared.repositories.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,6 +23,10 @@ public class FirstInitDbService {
     private EmployeeRepository employeeRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ServiceRepository serviceRepository;
+    @Autowired
+    private ServiceUserRepository serviceUserRepository;
     @Autowired
     private UserRoleInServiceRepository userRoleInServiceRepository;
 
@@ -96,6 +104,39 @@ public class FirstInitDbService {
     }
 
     /**
+     * Create services
+     */
+    public void createServices() {
+        List<UserEntity> usersEntities = this.userRepository.findAll();
+//        if(usersEntities.size() < 2) throw new Exception("count of users less than 2");
+
+        for (var userIdx = 0; userIdx < usersEntities.size(); userIdx += 2) {
+            try {
+                ServiceEntity serviceEntity = new ServiceEntity();
+                serviceEntity.setServiceName(String.format("service-name-%d", userIdx));
+                serviceEntity.setServiceDesc(String.format("service-desc-%d", userIdx));
+                serviceEntity.setUsers(new ArrayList<>());
+                this.serviceRepository.save(serviceEntity);
+
+                // user with role owner
+                ServiceUserEntity userInServiceOwner = new ServiceUserEntity();
+                userInServiceOwner.setUser(usersEntities.get(userIdx));
+                userInServiceOwner.setUserRole(this.userRoleInServiceRepository.findByRoleName("owner"));
+                userInServiceOwner.setService(serviceEntity);
+                this.serviceUserRepository.save(userInServiceOwner);
+
+                // user with role admin
+                ServiceUserEntity userInServiceAdmin = new ServiceUserEntity();
+                userInServiceAdmin.setUser(usersEntities.get(userIdx + 1));
+                userInServiceAdmin.setUserRole(this.userRoleInServiceRepository.findByRoleName("admin"));
+                userInServiceAdmin.setService(serviceEntity);
+                this.serviceUserRepository.save(userInServiceAdmin);
+            } catch (DataAccessException ignored) {
+            }
+        }
+    }
+
+    /**
      * Truncate tables
      */
     public void truncateDB() {
@@ -114,7 +155,7 @@ public class FirstInitDbService {
                 if(this.userRoleInServiceRepository.existsByRoleName(typeUserRoleService))
                     continue;
 
-                UserRoleInServiceEntity userRoleEntity = new UserRoleInServiceEntity();
+                TypeUserRoleInServiceEntity userRoleEntity = new TypeUserRoleInServiceEntity();
                 userRoleEntity.setRoleName(typeUserRoleService);
                 this.userRoleInServiceRepository.save(userRoleEntity);
             } catch (DataAccessException ignored) {

@@ -23,6 +23,7 @@ public class AdminSysController {
         this.firstInitDbService.createStaffUnits();
         this.firstInitDbService.createEmployees();
         this.firstInitDbService.createUsers();
+        this.firstInitDbService.createServices();
         return ResponseEntity.ok().body(null);
     }
 

@@ -30,7 +30,7 @@ public class ServiceUserEntity {
     @ManyToOne
     @JoinColumn(name = "roleId")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private UserRoleInServiceEntity userRole;
+    private TypeUserRoleInServiceEntity userRole;
 
     @ManyToOne
     @JoinColumn(name = "serviceId")

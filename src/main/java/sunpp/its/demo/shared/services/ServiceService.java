@@ -1,13 +1,12 @@
 package sunpp.its.demo.shared.services;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sunpp.its.demo.controllers.service.dto.CreateServiceRequestDTO;
 import sunpp.its.demo.controllers.service.dto.ServiceResponseDTO;
 import sunpp.its.demo.controllers.service.dto.UpdateServiceRequestDTO;
-import sunpp.its.demo.shared.entities.UserEntity;
 import sunpp.its.demo.shared.entities.service.ServiceEntity;
 import sunpp.its.demo.shared.entities.service.ServiceUserEntity;
 import sunpp.its.demo.shared.repositories.ServiceRepository;
@@ -101,17 +100,60 @@ public class ServiceService {
    * @param reqDTO DTO for update entities
    * @return DTO
    */
+  @Transactional
   public ServiceResponseDTO updateService(UpdateServiceRequestDTO reqDTO) {
     this.serviceRepository.findById(reqDTO.getServiceId()).orElseThrow(EntityNotFoundException::new);
 
     ServiceEntity serviceEntity = new ServiceEntity();
-//    userEntity.setUserId(reqDTO.getUserID());
-//    userEntity.setLogin(reqDTO.getLogin());
-//    userEntity.setPassword(reqDTO.getPassword());
-//    userEntity.setEmployee(this.employeeRepository.findById(reqDTO.getEmployeeID()).orElseThrow());
-
+    serviceEntity.setServiceId(reqDTO.getServiceId());
+    serviceEntity.setServiceName(reqDTO.getServiceName());
+    serviceEntity.setServiceDesc(reqDTO.getServiceDesc());
+    serviceEntity.setUsers(new ArrayList<>());
     this.serviceRepository.save(serviceEntity);
-    return ServiceResponseDTO.convertEntityToDTO(serviceEntity);
+
+    // delete all users from service
+    this.serviceUserRepository.deleteByService(serviceEntity);
+
+    // @NOTE why data not be deleted until data is not read ?
+    this.serviceUserRepository.count();
+
+    // add users to service with role as `user`
+    for (var userId : reqDTO.getUsersIdsAsRoleUser()) {
+      ServiceUserEntity userInService = new ServiceUserEntity();
+      userInService.setUser(this.userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
+      userInService.setUserRole(this.userRoleInServiceRepository.findByRoleName("user"));
+      userInService.setService(serviceEntity);
+      this.serviceUserRepository.save(userInService);
+    }
+
+    // add users to service with role as `owner`
+    for (var userId : reqDTO.getUsersIdsAsRoleOwner()) {
+      ServiceUserEntity userInService = new ServiceUserEntity();
+      userInService.setUser(this.userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
+      userInService.setUserRole(this.userRoleInServiceRepository.findByRoleName("owner"));
+      userInService.setService(serviceEntity);
+      this.serviceUserRepository.save(userInService);
+    }
+
+    // add users to service with role as `admin`
+    for (var userId : reqDTO.getUsersIdsAsRoleAdmin()) {
+      ServiceUserEntity userInService = new ServiceUserEntity();
+      userInService.setUser(this.userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
+      userInService.setUserRole(this.userRoleInServiceRepository.findByRoleName("admin"));
+      userInService.setService(serviceEntity);
+      this.serviceUserRepository.save(userInService);
+    }
+
+    ServiceResponseDTO responseDTO = new ServiceResponseDTO();
+    responseDTO.setServiceId(serviceEntity.getServiceId());
+    responseDTO.setServiceName(serviceEntity.getServiceName());
+    responseDTO.setServiceDesc(serviceEntity.getServiceDesc());
+
+    responseDTO.setUsersIdsAsRoleUser(reqDTO.getUsersIdsAsRoleUser());
+    responseDTO.setUsersIdsAsRoleOwner(reqDTO.getUsersIdsAsRoleOwner());
+    responseDTO.setUsersIdsAsRoleAdmin(reqDTO.getUsersIdsAsRoleAdmin());
+
+    return responseDTO;
   }
 
   /**

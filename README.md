@@ -11,7 +11,7 @@ Web application для управления доступом к сервисам
 `(User requests access -> Owner -> Admin).`
 
 
-## Установка:
+## Подготовка:
 
 Для сборки образа OracleDB для docker:
 ```shell
@@ -28,12 +28,13 @@ docker-compose up
 
 Код для создания пользователя в OracleDB: 
 ```sql
-CREATE USER c##sit IDENTIFIED BY password;
-GRANT RESOURCE TO c##sit;
-GRANT CONNECT TO c##sit;
-GRANT CREATE VIEW TO c##sit;
-GRANT CREATE SESSION TO c##sit;
-GRANT UNLIMITED TABLESPACE TO c##sit;
+CREATE USER c##its IDENTIFIED BY password;
+GRANT CREATE TABLE TO c##its;
+GRANT RESOURCE TO c##its;
+GRANT CONNECT TO c##its;
+GRANT CREATE VIEW TO c##its;
+GRANT CREATE SESSION TO c##its;
+GRANT UNLIMITED TABLESPACE TO c##its;
 ```
 
 ## Запуск

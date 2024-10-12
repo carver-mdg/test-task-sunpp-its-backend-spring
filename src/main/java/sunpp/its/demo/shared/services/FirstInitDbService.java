@@ -1,6 +1,5 @@
 package sunpp.its.demo.shared.services;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -94,7 +93,7 @@ public class FirstInitDbService {
         for (var employee : employeeEntities) {
             try {
                 UserEntity userEntity = new UserEntity();
-                userEntity.setLogin(String.format("login-%d", employee.getEmployeeId()));
+                userEntity.setUserName(String.format("userName-%d", employee.getEmployeeId()));
                 userEntity.setPassword(String.format("p%d", employee.getEmployeeId()));
                 userEntity.setEmployee(employee);
                 this.userRepository.save(userEntity);
@@ -144,6 +143,7 @@ public class FirstInitDbService {
         this.staffUnitRepository.deleteAll();
         this.employeeRepository.deleteAll();
         this.userRepository.deleteAll();
+        this.serviceRepository.deleteAll();
     }
 
     /**

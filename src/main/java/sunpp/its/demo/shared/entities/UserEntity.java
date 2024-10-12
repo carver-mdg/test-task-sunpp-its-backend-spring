@@ -18,8 +18,8 @@ public class UserEntity {
     @Column(name = "userId")
     private Integer userId;
 
-    @Column(name = "login", unique = true)
-    private String login;
+    @Column(name = "userName", unique = true)
+    private String userName;
 
     @Column(name = "password")
     private String password;

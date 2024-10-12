@@ -41,14 +41,14 @@ public class UserService {
      */
     public UserResponseDTO createUser(CreateUserRequestDTO reqDTO) {
         UserEntity userEntity = new UserEntity();
-        userEntity.setLogin(reqDTO.getLogin());
+        userEntity.setUserName(reqDTO.getUserName());
         userEntity.setPassword(reqDTO.getPassword());
         userEntity.setEmployee(this.employeeRepository.findById(reqDTO.getEmployeeID()).orElseThrow());
         this.userRepository.save(userEntity);
 
         UserResponseDTO responseDTO = new UserResponseDTO();
         responseDTO.setUserID(userEntity.getUserId());
-        responseDTO.setLogin(userEntity.getLogin());
+        responseDTO.setUserName(userEntity.getUserName());
         responseDTO.setEmployeeID(userEntity.getEmployee().getEmployeeId());
 
         return responseDTO;
@@ -65,7 +65,7 @@ public class UserService {
 
         UserEntity userEntity = new UserEntity();
         userEntity.setUserId(reqDTO.getUserID());
-        userEntity.setLogin(reqDTO.getLogin());
+        userEntity.setUserName(reqDTO.getUserName());
         userEntity.setPassword(reqDTO.getPassword());
         userEntity.setEmployee(this.employeeRepository.findById(reqDTO.getEmployeeID()).orElseThrow());
 

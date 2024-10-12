@@ -10,7 +10,7 @@ import sunpp.its.demo.shared.entities.UserEntity;
 @NoArgsConstructor
 public class UserResponseDTO {
     private Integer UserID;
-    private String Login;
+    private String userName;
     private Integer EmployeeID;
 
     /**
@@ -22,7 +22,7 @@ public class UserResponseDTO {
     public static UserResponseDTO convertEntityToDTO (UserEntity userEntity) {
         UserResponseDTO response = new UserResponseDTO();
         response.setUserID(userEntity.getUserId());
-        response.setLogin(userEntity.getLogin());
+        response.setUserName(userEntity.getUserName());
         response.setEmployeeID(userEntity.getEmployee().getEmployeeId());
         return response;
     }

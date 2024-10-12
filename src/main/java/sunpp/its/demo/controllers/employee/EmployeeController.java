@@ -12,7 +12,6 @@ import sunpp.its.demo.shared.services.EmployeeService;
 
 @RestController
 @RequestMapping("/api/v1/employees")
-@CrossOrigin()
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;

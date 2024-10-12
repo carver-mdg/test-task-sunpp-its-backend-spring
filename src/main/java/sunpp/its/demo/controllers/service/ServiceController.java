@@ -12,7 +12,6 @@ import sunpp.its.demo.shared.services.ServiceService;
 
 @RestController
 @RequestMapping("/api/v1/services")
-@CrossOrigin()
 public class ServiceController {
     @Autowired
     private ServiceService serviceService;

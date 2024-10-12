@@ -7,7 +7,6 @@ import sunpp.its.demo.shared.services.FirstInitDbService;
 
 @RestController
 @RequestMapping("/api/v1/admin-sys")
-@CrossOrigin()
 public class AdminSysController {
     @Autowired
     FirstInitDbService firstInitDbService;

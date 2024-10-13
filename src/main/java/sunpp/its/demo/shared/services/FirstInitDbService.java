@@ -93,7 +93,7 @@ public class FirstInitDbService {
         for (var employee : employeeEntities) {
             try {
                 UserEntity userEntity = new UserEntity();
-                userEntity.setUserName(String.format("userName-%d", employee.getEmployeeId()));
+                userEntity.setUserName(String.format("u%d", employee.getEmployeeId()));
                 userEntity.setPassword(String.format("p%d", employee.getEmployeeId()));
                 userEntity.setEmployee(employee);
                 this.userRepository.save(userEntity);

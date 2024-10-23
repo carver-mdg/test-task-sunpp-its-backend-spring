@@ -6,4 +6,5 @@ import sunpp.its.demo.shared.entities.UserEntity;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
+  UserEntity findByUserName(String userName);
 }

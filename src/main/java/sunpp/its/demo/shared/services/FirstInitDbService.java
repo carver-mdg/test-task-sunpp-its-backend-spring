@@ -7,6 +7,7 @@ import sunpp.its.demo.shared.entities.*;
 import sunpp.its.demo.shared.entities.service.ServiceEntity;
 import sunpp.its.demo.shared.entities.service.ServiceUserEntity;
 import sunpp.its.demo.shared.entities.service.TypeUserRoleInServiceEntity;
+import sunpp.its.demo.shared.entities.service.request.TypeResponseRequestRoleInServiceEntity;
 import sunpp.its.demo.shared.repositories.*;
 
 import java.util.ArrayList;
@@ -28,12 +29,15 @@ public class FirstInitDbService {
     private ServiceUserRepository serviceUserRepository;
     @Autowired
     private UserRoleInServiceRepository userRoleInServiceRepository;
+    @Autowired
+    private TypeResponseRequestRoleInServiceRepository typeResponseRequestRoleInServiceRepository;
 
     /**
      *
      */
     public void create() {
         this.createTypeUserRoleInService();
+        this.createTypeResponseRequestRoleInService();
     }
 
     /**
@@ -158,6 +162,23 @@ public class FirstInitDbService {
                 TypeUserRoleInServiceEntity userRoleEntity = new TypeUserRoleInServiceEntity();
                 userRoleEntity.setRoleName(typeUserRoleService);
                 this.userRoleInServiceRepository.save(userRoleEntity);
+            } catch (DataAccessException ignored) {
+            }
+        }
+    }
+
+    /**
+     * Create types of response for requested role in service
+     */
+    private void createTypeResponseRequestRoleInService() {
+        for (var typeResponseRequestRoleInService : new String[]{"approved", "rejected"}) {
+            try {
+                if(this.typeResponseRequestRoleInServiceRepository.existsByTypeResponseName(typeResponseRequestRoleInService))
+                    continue;
+
+                TypeResponseRequestRoleInServiceEntity responseRequestRoleInServiceEntity = new TypeResponseRequestRoleInServiceEntity();
+                responseRequestRoleInServiceEntity.setTypeResponseName(typeResponseRequestRoleInService);
+                this.typeResponseRequestRoleInServiceRepository.save(responseRequestRoleInServiceEntity);
             } catch (DataAccessException ignored) {
             }
         }

@@ -491,9 +491,20 @@ public class ServiceService {
 
         case "admin":
           if(responseOfUser.getTypeResponseName().equals("approved")) {
-            var userInService = this.serviceUserRepository.findByUserAndService(toUser, service);
-            userInService.setUserRole(request.getRequestedRole());
-            this.serviceUserRepository.save(userInService);
+            var userInServiceFinded = this.serviceUserRepository.findByUserAndService(toUser, service);
+            if(userInServiceFinded == null) {
+              // the user does not exists in the service, so just create new withrole
+              ServiceUserEntity userInService = new ServiceUserEntity();
+              userInService.setUser(toUser);
+              userInService.setUserRole(request.getRequestedRole());
+              userInService.setService(service);
+              this.serviceUserRepository.save(userInService);
+            }
+            else {
+              // the user exists in the service, so just update his role
+              userInServiceFinded.setUserRole(request.getRequestedRole());
+              this.serviceUserRepository.save(userInServiceFinded);
+            }
           }
 
           request.setIsActive(false);

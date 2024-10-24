@@ -11,6 +11,10 @@ Web application для управления доступом к сервисам
 `(User requests access -> Owner -> Admin).`
 
 
+## Схема базы данных
+![ERD of application](docs/app-erd.png "ERD of application")
+
+
 ## Подготовка:
 
 Для сборки образа OracleDB для docker:
@@ -46,39 +50,36 @@ GRANT UNLIMITED TABLESPACE TO c##its;
 
 
 ## RestAPI
-| HTTP Method | url                              | desc                                     |
-|-------------|----------------------------------|------------------------------------------|
-| GET         | /api/v1/departments              | Get all                                  |
-| POST        | /api/v1/departments              | Create                                   |
-| PUT         | /api/v1/departments/{id}         | Update                                   |
-| DELETE      | /api/v1/departments/{id}         | Delete                                   |
-|             |                                  |                                          |
-| GET         | /api/v1/staff-units              | Get all                                  |
-| POST        | /api/v1/staff-units              | Create                                   |
-| PUT         | /api/v1/staff-units/{id}         | Update                                   |
-| DELETE      | /api/v1/staff-units/{id}         | Delete                                   |
-|             |                                  |                                          |
-| GET         | /api/v1/employees                | Get all                                  |
-| POST        | /api/v1/employees                | Create                                   |
-| PUT         | /api/v1/employees/{id}           | Update                                   |
-| DELETE      | /api/v1/employees/{id}           | Delete                                   |
-|             |                                  |                                          |
-| GET         | /api/v1/users                    | Get all                                  |
-| POST        | /api/v1/users                    | Create                                   |
-| PUT         | /api/v1/users/{id}               | Update                                   |
-| DELETE      | /api/v1/users/{id}               | Delete                                   |
-|             |                                  |                                          |
-|             |                                  |                                          |
-|             |                                  |                                          |
-|             |                                  |                                          |
-|             |                                  |                                          |
-|             |                                  |                                          |
-|             |                                  |                                          |
-|             |                                  |                                          |
-|             |                                  |                                          |
-|             |                                  |                                          |
-|             |                                  |                                          |
-|             |                                  |                                          |
-|             |                                  |                                          |
-| POST        | /api/v1/admin-sys/fill-mock-data | Send command to fill tables by mock data |
-| POST        | /api/v1/admin-sys/truncate-db    | Send command to truncate database        |
+| HTTP Method | url                                                                           | desc                                                 |
+|-------------|-------------------------------------------------------------------------------|------------------------------------------------------|
+| GET         | /api/v1/departments                                                           | Get all                                              |
+| POST        | /api/v1/departments                                                           | Create                                               |
+| PUT         | /api/v1/departments/{id}                                                      | Update                                               |
+| DELETE      | /api/v1/departments/{id}                                                      | Delete                                               |
+|             |                                                                               |                                                      |
+| GET         | /api/v1/staff-units                                                           | Get all                                              |
+| POST        | /api/v1/staff-units                                                           | Create                                               |
+| PUT         | /api/v1/staff-units/{id}                                                      | Update                                               |
+| DELETE      | /api/v1/staff-units/{id}                                                      | Delete                                               |
+|             |                                                                               |                                                      |
+| GET         | /api/v1/employees                                                             | Get all                                              |
+| POST        | /api/v1/employees                                                             | Create                                               |
+| PUT         | /api/v1/employees/{id}                                                        | Update                                               |
+| DELETE      | /api/v1/employees/{id}                                                        | Delete                                               |
+|             |                                                                               |                                                      |
+| GET         | /api/v1/users                                                                 | Get all                                              |
+| POST        | /api/v1/users                                                                 | Create                                               |
+| PUT         | /api/v1/users/{id}                                                            | Update                                               |
+| DELETE      | /api/v1/users/{id}                                                            | Delete                                               |
+|             |                                                                               |                                                      |
+| GET         | /api/v1/viewer/{user_id}                                                      | Get list of services for usage by users              |
+| GET         | /api/v1/{service_id}/users/{user_id}                                          | Get service item                                     |
+| GET         | /api/v1/users/types/roles                                                     | Get possible user role types in services             |
+| GET         | /api/v1/users/{userId}/role/{roleId}                                          | Get services where user (user_id) has role (role_id) |
+| POST        | /api/v1/{serviceId}/request/obtain/users/{userId}/role/{userRoleId}           | A request to obtain the user role in the service     |
+| GET         | /api/v1/users/{userId}/access/response/waiting                                | Loading services which waiting approved to access    |
+| POST        | /api/v1/{serviceId}/request/obtain/role/users/from/{fromUserId}/to/{toUserId} | Client send response access grant to service         |
+| GET         | /api/v1/{serviceId}/history                                                   | Load history of requests user role in service        |
+|             |                                                                               |                                                      |
+| POST        | /api/v1/admin-sys/fill-mock-data                                              | Send command to fill tables by mock data             |
+| POST        | /api/v1/admin-sys/truncate-db                                                 | Send command to truncate database                    |

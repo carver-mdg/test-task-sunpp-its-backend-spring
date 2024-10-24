@@ -166,4 +166,16 @@ public class ServiceController {
         this.serviceService.sendResponseAccessGrantToService(serviceId, fromUserId, toUserId, responseOfUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
+
+
+    /**
+     *
+     * @param serviceId
+     * @return
+     */
+    @GetMapping("/{serviceId}/history")
+    public ResponseEntity<?> getRequestsHistory(@PathVariable Integer serviceId) {
+        return ResponseEntity.ok().body(serviceService.loadRequestsHistory(serviceId));
+    }
+
 }

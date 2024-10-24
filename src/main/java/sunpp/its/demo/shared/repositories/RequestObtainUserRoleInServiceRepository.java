@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface RequestObtainUserRoleInServiceRepository extends JpaRepository <RequestObtainUserRoleInServiceEntity, Integer> {
+  List<RequestObtainUserRoleInServiceEntity> findByIsActive(Boolean isActive);
   List<RequestObtainUserRoleInServiceEntity> findByServiceAndUserCustomer(ServiceEntity service, UserEntity userCustomer);
   List<RequestObtainUserRoleInServiceEntity> findByServiceAndUserCustomerAndIsActive(ServiceEntity service, UserEntity userCustomer, Boolean isActive);
 }

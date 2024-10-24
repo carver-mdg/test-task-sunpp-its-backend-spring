@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sunpp.its.demo.controllers.service.dto.HistoryRequestAccessResponseDTO;
 import sunpp.its.demo.controllers.service.dto.UserRoleInServiceResponseDTO;
 import sunpp.its.demo.controllers.service.dto.adminsys.CreateServiceRequestDTO;
 import sunpp.its.demo.controllers.service.dto.adminsys.ServiceResponseDTO;
@@ -17,8 +18,9 @@ import sunpp.its.demo.shared.entities.service.request.RequestObtainUserRoleInSer
 import sunpp.its.demo.shared.entities.service.request.ResponseRequestRoleInServiceEntity;
 import sunpp.its.demo.shared.repositories.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -306,8 +308,8 @@ public class ServiceService {
     // current logged user
     var curUser = this.userRepository.findById(curUserId).orElseThrow(EntityNotFoundException::new);
 
-    for (var request : this.requestObtainUserRoleInServiceRepository.findAll()) {
-      if (!request.getIsActive()) continue;
+    for (var request : this.requestObtainUserRoleInServiceRepository.findByIsActive(true)) {
+//      if (!request.getIsActive()) continue;
 
 
       // find current logged user in service
@@ -321,6 +323,50 @@ public class ServiceService {
 
       // user role in the service for current logged user
       var curUserRole = serviceUsers.get(0).getUserRole();
+
+      var responseRequestRoleInService = this.responseRequestRoleInServiceRepository.findByRequest(request);
+
+      boolean isAddToView = false;
+
+      switch (curUserRole.getRoleName()) {
+        case "user":
+          break;
+
+        case "owner":
+          if (responseRequestRoleInService.isEmpty())
+            isAddToView = true;
+          break;
+
+        case "admin":
+          if (responseRequestRoleInService.isEmpty())
+            break;
+//            throw new RuntimeException("The owner should give permission first, how did it get to the admin?");
+
+          for (var item : responseRequestRoleInService) {
+            // did the admin give an access ?
+            if (
+                this.serviceUserRepository.findByUserAndService(
+                    item.getUser(),
+                    request.getService()
+                ).getUserRole().getRoleName().equals("admin")
+            )
+              break;
+            else if (
+                this.serviceUserRepository.findByUserAndService(
+                    item.getUser(),
+                    request.getService()
+                ).getUserRole().getRoleName().equals("owner")
+                    && item.getTypeResponse().getTypeResponseName().equals("approved")
+            ) {
+              isAddToView = true;
+              break;
+            }
+          }
+          break;
+
+        default:
+          throw new IllegalArgumentException("The user's role in the service is not defined");
+      }
 
       // {userRoleName, TypeResponseName}
 //      HashMap<String, String> isApproveByUsers = new HashMap<>();
@@ -365,26 +411,16 @@ public class ServiceService {
 //      } // /switch (curUserRole.getRoleName())
 
       // need to add to DTO
-//      if(isAddToView)
-//        responseDTO.add(
-//            ServiceWaitingAccessResponseDTO.builder()
-//                .serviceId(request.getService().getServiceId())
-//                .serviceName(request.getService().getServiceName())
-//                .userId(request.getUserCustomer().getUserId())
-//                .userName(request.getUserCustomer().getUserName())
-//                .userRoleName(request.getRequestedRole().getRoleName())
-//                .build()
-//        );
-
-      responseDTO.add(
-          ServiceWaitingAccessResponseDTO.builder()
-              .serviceId(request.getService().getServiceId())
-              .serviceName(request.getService().getServiceName())
-              .userId(request.getUserCustomer().getUserId())
-              .userName(request.getUserCustomer().getUserName())
-              .userRoleName(request.getRequestedRole().getRoleName())
-              .build()
-      );
+      if(isAddToView)
+        responseDTO.add(
+            ServiceWaitingAccessResponseDTO.builder()
+                .serviceId(request.getService().getServiceId())
+                .serviceName(request.getService().getServiceName())
+                .userId(request.getUserCustomer().getUserId())
+                .userName(request.getUserCustomer().getUserName())
+                .userRoleName(request.getRequestedRole().getRoleName())
+                .build()
+        );
     }
 
     return responseDTO;
@@ -446,6 +482,10 @@ public class ServiceService {
                 request.getRequestedRole().getRoleId()
             );
           }
+          if(responseOfUser.getTypeResponseName().equals("rejected")) {
+            request.setIsActive(false);
+            this.requestObtainUserRoleInServiceRepository.save(request);
+          }
           break;
 
         case "admin":
@@ -463,5 +503,32 @@ public class ServiceService {
           throw new IllegalArgumentException("The user's role in service is not allowed");
       } // /switch (fromUserRole.getRoleName())
     }
+  }
+
+
+  /**
+   * Load history of access to the service
+   *
+   * @param serviceId
+   * @return
+   */
+  public List<HistoryRequestAccessResponseDTO> loadRequestsHistory(Integer serviceId) {
+    List<HistoryRequestAccessResponseDTO> responseDTO = new LinkedList<>();
+
+    for(var respReqRole : this.responseRequestRoleInServiceRepository.findAll()) {
+      var request = respReqRole.getRequest();
+
+      responseDTO.add(
+          HistoryRequestAccessResponseDTO.builder()
+              .serviceName(request.getService().getServiceName())
+              .requestedRole(request.getRequestedRole().getRoleName())
+              .userNameCustomer(String.format("%s (%s)", request.getUserCustomer().getEmployee().getFullName(), request.getUserCustomer().getUserName()))
+              .userNameGivesAccess(String.format("%s (%s)", respReqRole.getUser().getEmployee().getFullName(), respReqRole.getUser().getUserName()))
+              .statusAccess(respReqRole.getTypeResponse().getTypeResponseName())
+              .dateCreated(request.getCreatedOn())
+              .build()
+      );
+    }
+    return responseDTO;
   }
 }

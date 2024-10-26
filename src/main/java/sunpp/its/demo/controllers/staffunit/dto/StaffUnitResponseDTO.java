@@ -9,21 +9,22 @@ import sunpp.its.demo.shared.entities.StaffUnitEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StaffUnitResponseDTO {
-    private Integer StaffUnitID;
-    private String StaffUnitName;
-    private Integer DepartmentID;
+  private Integer staffUnitId;
+  private String staffUnitName;
+  private Integer departmentId;
 
-    /**
-     * Convert entity to response DTO to clients
-     *
-     * @param staffUnitEntity Entity of staff unit
-     * @return DTO of staff unit
-     */
-    public static StaffUnitResponseDTO convertEntityToDTO (StaffUnitEntity staffUnitEntity) {
-        StaffUnitResponseDTO response = new StaffUnitResponseDTO();
-        response.setStaffUnitID(staffUnitEntity.getStaffUnitId());
-        response.setStaffUnitName(staffUnitEntity.getStaffUnitName());
-        response.setDepartmentID(staffUnitEntity.getDepartment().getDepartmentId());
-        return response;
-    }
+
+  /**
+   * Convert entity to response DTO to clients
+   *
+   * @param staffUnitEntity Entity of staff unit
+   * @return DTO of staff unit
+   */
+  public static StaffUnitResponseDTO convertEntityToDTO(StaffUnitEntity staffUnitEntity) {
+    StaffUnitResponseDTO response = new StaffUnitResponseDTO();
+    response.setStaffUnitId(staffUnitEntity.getStaffUnitId());
+    response.setStaffUnitName(staffUnitEntity.getStaffUnitName());
+    response.setDepartmentId(staffUnitEntity.getDepartment().getDepartmentId());
+    return response;
+  }
 }

@@ -9,21 +9,22 @@ import sunpp.its.demo.shared.entities.EmployeeEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeResponseDTO {
-    private Integer EmployeeID;
-    private String FullName;
-    private Integer StaffUnitID;
+  private Integer employeeId;
+  private String fullName;
+  private Integer staffUnitId;
 
-    /**
-     * Convert entity to response DTO to clients
-     *
-     * @param employeeEntity Entity of employee
-     * @return DTO of employee
-     */
-    public static EmployeeResponseDTO convertEntityToDTO (EmployeeEntity employeeEntity) {
-        EmployeeResponseDTO response = new EmployeeResponseDTO();
-        response.setEmployeeID(employeeEntity.getEmployeeId());
-        response.setFullName(employeeEntity.getFullName());
-        response.setStaffUnitID(employeeEntity.getStaffUnit().getStaffUnitId());
-        return response;
-    }
+
+  /**
+   * Convert entity to response DTO to clients
+   *
+   * @param employeeEntity Entity of employee
+   * @return DTO of employee
+   */
+  public static EmployeeResponseDTO convertEntityToDTO(EmployeeEntity employeeEntity) {
+    EmployeeResponseDTO response = new EmployeeResponseDTO();
+    response.setEmployeeId(employeeEntity.getEmployeeId());
+    response.setFullName(employeeEntity.getFullName());
+    response.setStaffUnitId(employeeEntity.getStaffUnit().getStaffUnitId());
+    return response;
+  }
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateStaffUnitRequestDTO {
-    private Integer StaffUnitID;
-    private String StaffUnitName;
-    private Integer DepartmentID;
+    private Integer staffUnitId;
+    private String staffUnitName;
+    private Integer departmentId;
 }

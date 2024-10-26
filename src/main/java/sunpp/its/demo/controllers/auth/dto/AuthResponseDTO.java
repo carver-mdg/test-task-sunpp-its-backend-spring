@@ -3,8 +3,8 @@ package sunpp.its.demo.controllers.auth.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import sunpp.its.demo.shared.entities.auth.TypeUserRoleInSystemEntity;
 import sunpp.its.demo.shared.entities.UserEntity;
+import sunpp.its.demo.shared.entities.auth.TypeUserRoleInSystemEntity;
 
 @Data
 @AllArgsConstructor
@@ -15,6 +15,12 @@ public class AuthResponseDTO {
   private Integer userRoleId;
   private String userRoleName;
 
+
+  /**
+   * @param userEntity
+   * @param userRoleInSystemEntity
+   * @return
+   */
   public static AuthResponseDTO convertEntitiesToDTO(
       UserEntity userEntity,
       TypeUserRoleInSystemEntity userRoleInSystemEntity

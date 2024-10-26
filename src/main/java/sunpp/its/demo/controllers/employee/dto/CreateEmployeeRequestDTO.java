@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateEmployeeRequestDTO {
-    private String FullName;
-    private Integer StaffUnitID;
+    private String fullName;
+    private Integer staffUnitId;
 }

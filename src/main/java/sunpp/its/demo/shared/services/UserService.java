@@ -1,7 +1,6 @@
 package sunpp.its.demo.shared.services;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sunpp.its.demo.controllers.user.dto.CreateUserRequestDTO;
 import sunpp.its.demo.controllers.user.dto.UpdateUserRequestDTO;
@@ -15,70 +14,84 @@ import java.util.List;
 
 @Service
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
+  private final UserRepository userRepository;
+  private final EmployeeRepository employeeRepository;
 
 
-    /**
-     * Get list of all users
-     *
-     * @return list of DTOs
-     */
-    public List<UserResponseDTO> getUsersList() {
-        List<UserResponseDTO> response = new LinkedList<>();
-        for (UserEntity user : this.userRepository.findAll())
-            response.add(UserResponseDTO.convertEntityToDTO(user));
-        return response;
-    }
+  /**
+   * @param userRepository
+   * @param employeeRepository
+   */
+  public UserService(
+      UserRepository userRepository,
+      EmployeeRepository employeeRepository
+  ) {
+    this.userRepository = userRepository;
+    this.employeeRepository = employeeRepository;
+  }
 
-    /**
-     * Create new user from createDTO
-     *
-     * @param reqDTO DTO for create entity
-     * @return DTO
-     */
-    public UserResponseDTO createUser(CreateUserRequestDTO reqDTO) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUserName(reqDTO.getUserName());
-        userEntity.setPassword(reqDTO.getPassword());
-        userEntity.setEmployee(this.employeeRepository.findById(reqDTO.getEmployeeID()).orElseThrow());
-        this.userRepository.save(userEntity);
 
-        UserResponseDTO responseDTO = new UserResponseDTO();
-        responseDTO.setUserID(userEntity.getUserId());
-        responseDTO.setUserName(userEntity.getUserName());
-        responseDTO.setEmployeeID(userEntity.getEmployee().getEmployeeId());
+  /**
+   * Get list of all users
+   *
+   * @return list of DTOs
+   */
+  public List<UserResponseDTO> getUsersList() {
+    List<UserResponseDTO> response = new LinkedList<>();
+    for (UserEntity user : this.userRepository.findAll())
+      response.add(UserResponseDTO.convertEntityToDTO(user));
+    return response;
+  }
 
-        return responseDTO;
-    }
 
-    /**
-     * Update user from updateDTO
-     *
-     * @param reqDTO DTO for update entities
-     * @return DTO
-     */
-    public UserResponseDTO updateUser(UpdateUserRequestDTO reqDTO) {
-        this.userRepository.findById(reqDTO.getUserID()).orElseThrow(EntityNotFoundException::new);
+  /**
+   * Create new user from createDTO
+   *
+   * @param reqDTO DTO for create entity
+   * @return DTO
+   */
+  public UserResponseDTO createUser(CreateUserRequestDTO reqDTO) {
+    UserEntity userEntity = new UserEntity();
+    userEntity.setUserName(reqDTO.getUserName());
+    userEntity.setPassword(reqDTO.getPassword());
+    userEntity.setEmployee(this.employeeRepository.findById(reqDTO.getEmployeeId()).orElseThrow());
+    this.userRepository.save(userEntity);
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUserId(reqDTO.getUserID());
-        userEntity.setUserName(reqDTO.getUserName());
-        userEntity.setPassword(reqDTO.getPassword());
-        userEntity.setEmployee(this.employeeRepository.findById(reqDTO.getEmployeeID()).orElseThrow());
+    UserResponseDTO responseDTO = new UserResponseDTO();
+    responseDTO.setUserId(userEntity.getUserId());
+    responseDTO.setUserName(userEntity.getUserName());
+    responseDTO.setEmployeeId(userEntity.getEmployee().getEmployeeId());
 
-        this.userRepository.save(userEntity);
-        return UserResponseDTO.convertEntityToDTO(userEntity);
-    }
+    return responseDTO;
+  }
 
-    /**
-     * Delete user
-     *
-     * @param id ID of entity
-     */
-    public void deleteUser(Integer id) {
-        this.userRepository.delete(this.userRepository.findById(id).orElseThrow(EntityNotFoundException::new));
-    }
+
+  /**
+   * Update user from updateDTO
+   *
+   * @param reqDTO DTO for update entities
+   * @return DTO
+   */
+  public UserResponseDTO updateUser(UpdateUserRequestDTO reqDTO) {
+    this.userRepository.findById(reqDTO.getUserId()).orElseThrow(EntityNotFoundException::new);
+
+    UserEntity userEntity = new UserEntity();
+    userEntity.setUserId(reqDTO.getUserId());
+    userEntity.setUserName(reqDTO.getUserName());
+    userEntity.setPassword(reqDTO.getPassword());
+    userEntity.setEmployee(this.employeeRepository.findById(reqDTO.getEmployeeId()).orElseThrow());
+
+    this.userRepository.save(userEntity);
+    return UserResponseDTO.convertEntityToDTO(userEntity);
+  }
+
+
+  /**
+   * Delete user
+   *
+   * @param userId ID of entity
+   */
+  public void deleteUser(Integer userId) {
+    this.userRepository.delete(this.userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
+  }
 }

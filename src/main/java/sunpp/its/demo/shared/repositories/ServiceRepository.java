@@ -12,7 +12,6 @@ import java.util.List;
 
 @Repository
 public interface ServiceRepository extends JpaRepository<ServiceEntity, Integer> {
-//  List<ServiceEntity> findByUsersAndUserRole(UserEntity user, TypeUserRoleInServiceEntity userRole);
   @Query(value = """
       SELECT
       service.*

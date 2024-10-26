@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateStaffUnitRequestDTO {
-    private String StaffUnitName;
-    private Integer DepartmentID;
+  private String staffUnitName;
+  private Integer departmentId;
 }

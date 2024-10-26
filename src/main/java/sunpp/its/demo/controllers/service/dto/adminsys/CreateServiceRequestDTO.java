@@ -10,9 +10,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateServiceRequestDTO {
-    private String serviceName;
-    private String serviceDesc;
-    private List<Integer> usersIdsAsRoleUser;
-    private List<Integer> usersIdsAsRoleOwner;
-    private List<Integer> usersIdsAsRoleAdmin;
+  private String serviceName;
+  private String serviceDesc;
+  private List<Integer> usersIdsAsRoleUser;
+  private List<Integer> usersIdsAsRoleOwner;
+  private List<Integer> usersIdsAsRoleAdmin;
 }

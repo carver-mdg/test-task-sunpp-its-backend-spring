@@ -9,20 +9,17 @@ import sunpp.its.demo.shared.entities.DepartmentEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateDepartmentRequestDTO {
-    private Integer DepartmentID;
-    private String DepartmentName;
+  private Integer departmentId;
+  private String departmentName;
 
-//    public static DepartmentEntity convertDTOToEntity (UpdateDepartmentRequestDTO dto) {
-//        DepartmentEntity entity = new DepartmentEntity();
-//        entity.setDepartmentID(dto.getDepartmentID());
-//        entity.setDepartmentName(dto.getDepartmentName());
-//        return entity;
-//    }
 
-    public DepartmentEntity convertDTOToEntity () {
-        DepartmentEntity entity = new DepartmentEntity();
-        entity.setDepartmentId(this.getDepartmentID());
-        entity.setDepartmentName(this.getDepartmentName());
-        return entity;
-    }
+  /**
+   * @return
+   */
+  public DepartmentEntity convertDTOToEntity() {
+    DepartmentEntity entity = new DepartmentEntity();
+    entity.setDepartmentId(this.getDepartmentId());
+    entity.setDepartmentName(this.getDepartmentName());
+    return entity;
+  }
 }

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import sunpp.its.demo.shared.entities.service.ServiceEntity;
-import sunpp.its.demo.shared.entities.service.ServiceUserEntity;
 
 @Data
 @AllArgsConstructor
@@ -18,13 +17,14 @@ public class ServiceResponseDTO {
   private String userRoleNameRequested;
   private String userRoleNameRequestedStatus; // the status of the role promotion request
 
+
   /**
    * Convert entity to response DTO to clients
    *
    * @param serviceEntity Entity of service system
    * @return DTO of service system
    */
-  public static ServiceResponseDTO convertEntityToDTO (
+  public static ServiceResponseDTO convertEntityToDTO(
       ServiceEntity serviceEntity,
       Boolean isHasAccess,
       String userRoleName,

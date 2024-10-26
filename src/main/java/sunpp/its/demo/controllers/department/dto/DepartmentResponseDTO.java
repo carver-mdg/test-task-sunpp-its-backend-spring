@@ -9,13 +9,18 @@ import sunpp.its.demo.shared.entities.DepartmentEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DepartmentResponseDTO {
-    private Integer DepartmentID;
-    private String DepartmentName;
+  private Integer departmentId;
+  private String departmentName;
 
-    public static DepartmentResponseDTO convertEntityToDTO (DepartmentEntity departmentEntity) {
-        DepartmentResponseDTO response = new DepartmentResponseDTO();
-        response.setDepartmentID(departmentEntity.getDepartmentId());
-        response.setDepartmentName(departmentEntity.getDepartmentName());
-        return response;
-    }
+
+  /**
+   * @param departmentEntity
+   * @return
+   */
+  public static DepartmentResponseDTO convertEntityToDTO(DepartmentEntity departmentEntity) {
+    DepartmentResponseDTO response = new DepartmentResponseDTO();
+    response.setDepartmentId(departmentEntity.getDepartmentId());
+    response.setDepartmentName(departmentEntity.getDepartmentName());
+    return response;
+  }
 }

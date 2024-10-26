@@ -1,7 +1,6 @@
 package sunpp.its.demo.shared.services;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sunpp.its.demo.controllers.staffunit.dto.CreateStaffUnitRequestDTO;
 import sunpp.its.demo.controllers.staffunit.dto.StaffUnitResponseDTO;
@@ -16,69 +15,83 @@ import java.util.List;
 
 @Service
 public class StaffUnitService {
-    @Autowired
-    private StaffUnitRepository staffUnitRepository;
-    @Autowired
-    private DepartmentRepository departmentRepository;
+  private final StaffUnitRepository staffUnitRepository;
+  private final DepartmentRepository departmentRepository;
 
 
-    /**
-     * Get list of all staff units
-     *
-     * @return list of DTOs
-     */
-    public List<StaffUnitResponseDTO> getStaffUnitsList() {
-        List<StaffUnitResponseDTO> response = new LinkedList<>();
-        for (StaffUnitEntity staffUnit : this.staffUnitRepository.findAll())
-            response.add(StaffUnitResponseDTO.convertEntityToDTO(staffUnit));
-        return response;
-    }
+  /**
+   * @param staffUnitRepository
+   * @param departmentRepository
+   */
+  public StaffUnitService(
+      StaffUnitRepository staffUnitRepository,
+      DepartmentRepository departmentRepository
+  ) {
+    this.staffUnitRepository = staffUnitRepository;
+    this.departmentRepository = departmentRepository;
+  }
 
-    /**
-     * Create new staff unit from createDTO
-     *
-     * @param suReqDTO DTO for create entity
-     * @return DTO
-     */
-    public StaffUnitResponseDTO createStaffUnit(CreateStaffUnitRequestDTO suReqDTO) {
-        DepartmentEntity department = this.departmentRepository.findById(suReqDTO.getDepartmentID()).orElseThrow();
 
-        StaffUnitEntity staffUnit = new StaffUnitEntity();
-        staffUnit.setStaffUnitName(suReqDTO.getStaffUnitName());
-        staffUnit.setDepartment(department);
-        staffUnit = this.staffUnitRepository.save(staffUnit);
+  /**
+   * Get list of all staff units
+   *
+   * @return list of DTOs
+   */
+  public List<StaffUnitResponseDTO> getStaffUnitsList() {
+    List<StaffUnitResponseDTO> response = new LinkedList<>();
+    for (StaffUnitEntity staffUnit : this.staffUnitRepository.findAll())
+      response.add(StaffUnitResponseDTO.convertEntityToDTO(staffUnit));
+    return response;
+  }
 
-        StaffUnitResponseDTO responseDTO = new StaffUnitResponseDTO();
-        responseDTO.setDepartmentID(department.getDepartmentId());
-        responseDTO.setStaffUnitID(staffUnit.getStaffUnitId());
-        responseDTO.setStaffUnitName(staffUnit.getStaffUnitName());
 
-        return responseDTO;
-    }
+  /**
+   * Create new staff unit from createDTO
+   *
+   * @param suReqDTO DTO for create entity
+   * @return DTO
+   */
+  public StaffUnitResponseDTO createStaffUnit(CreateStaffUnitRequestDTO suReqDTO) {
+    DepartmentEntity department = this.departmentRepository.findById(suReqDTO.getDepartmentId()).orElseThrow();
 
-    /**
-     * Update exist staff unit from updateDTO
-     *
-     * @param suReqDTO DTO for update entities
-     * @return DTO
-     */
-    public StaffUnitResponseDTO updateStaffUnit(UpdateStaffUnitRequestDTO suReqDTO) {
-        StaffUnitEntity entity = new StaffUnitEntity();
-        entity.setStaffUnitId(suReqDTO.getStaffUnitID());
-        entity.setStaffUnitName(suReqDTO.getStaffUnitName());
-        entity.setDepartment(this.departmentRepository.findById(suReqDTO.getDepartmentID()).orElseThrow());
+    StaffUnitEntity staffUnit = new StaffUnitEntity();
+    staffUnit.setStaffUnitName(suReqDTO.getStaffUnitName());
+    staffUnit.setDepartment(department);
+    staffUnit = this.staffUnitRepository.save(staffUnit);
 
-        this.staffUnitRepository.save(entity);
-        return StaffUnitResponseDTO.convertEntityToDTO(entity);
-    }
+    StaffUnitResponseDTO responseDTO = new StaffUnitResponseDTO();
+    responseDTO.setDepartmentId(department.getDepartmentId());
+    responseDTO.setStaffUnitId(staffUnit.getStaffUnitId());
+    responseDTO.setStaffUnitName(staffUnit.getStaffUnitName());
 
-    /**
-     * Delete staff unit
-     *
-     * @param id ID of entity
-     */
-    public void deleteStaffUnit(Integer id) {
-        StaffUnitEntity staffUnit = this.staffUnitRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        this.staffUnitRepository.delete(staffUnit);
-    }
+    return responseDTO;
+  }
+
+
+  /**
+   * Update exist staff unit from updateDTO
+   *
+   * @param suReqDTO DTO for update entities
+   * @return DTO
+   */
+  public StaffUnitResponseDTO updateStaffUnit(UpdateStaffUnitRequestDTO suReqDTO) {
+    StaffUnitEntity entity = new StaffUnitEntity();
+    entity.setStaffUnitId(suReqDTO.getStaffUnitId());
+    entity.setStaffUnitName(suReqDTO.getStaffUnitName());
+    entity.setDepartment(this.departmentRepository.findById(suReqDTO.getDepartmentId()).orElseThrow());
+
+    this.staffUnitRepository.save(entity);
+    return StaffUnitResponseDTO.convertEntityToDTO(entity);
+  }
+
+
+  /**
+   * Delete staff unit
+   *
+   * @param staffUnitId ID of entity
+   */
+  public void deleteStaffUnit(Integer staffUnitId) {
+    StaffUnitEntity staffUnit = this.staffUnitRepository.findById(staffUnitId).orElseThrow(EntityNotFoundException::new);
+    this.staffUnitRepository.delete(staffUnit);
+  }
 }

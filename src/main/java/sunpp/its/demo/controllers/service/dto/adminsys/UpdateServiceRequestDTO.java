@@ -10,10 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateServiceRequestDTO {
-    private Integer serviceId;
-    private String serviceName;
-    private String serviceDesc;
-    private List<Integer> usersIdsAsRoleUser;
-    private List<Integer> usersIdsAsRoleOwner;
-    private List<Integer> usersIdsAsRoleAdmin;
+  private Integer serviceId;
+  private String serviceName;
+  private String serviceDesc;
+  private List<Integer> usersIdsAsRoleUser;
+  private List<Integer> usersIdsAsRoleOwner;
+  private List<Integer> usersIdsAsRoleAdmin;
 }

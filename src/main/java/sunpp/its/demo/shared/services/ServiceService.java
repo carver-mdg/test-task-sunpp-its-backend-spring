@@ -1,7 +1,6 @@
 package sunpp.its.demo.shared.services;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sunpp.its.demo.controllers.service.dto.HistoryRequestAccessResponseDTO;
@@ -18,8 +17,6 @@ import sunpp.its.demo.shared.entities.service.request.RequestObtainUserRoleInSer
 import sunpp.its.demo.shared.entities.service.request.ResponseRequestRoleInServiceEntity;
 import sunpp.its.demo.shared.repositories.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,20 +24,41 @@ import java.util.Objects;
 
 @Service
 public class ServiceService {
-  @Autowired
-  private ServiceRepository serviceRepository;
-  @Autowired
-  private UserRepository userRepository;
-  @Autowired
-  private UserRoleInServiceRepository userRoleInServiceRepository;
-  @Autowired
-  private ServiceUserRepository serviceUserRepository;
-  @Autowired
-  private RequestObtainUserRoleInServiceRepository requestObtainUserRoleInServiceRepository;
-  @Autowired
-  private ResponseRequestRoleInServiceRepository responseRequestRoleInServiceRepository;
-  @Autowired
-  TypeResponseRequestRoleInServiceRepository typeResponseRequestRoleInServiceRepository;
+  private final ServiceRepository serviceRepository;
+  private final UserRepository userRepository;
+  private final UserRoleInServiceRepository userRoleInServiceRepository;
+  private final ServiceUserRepository serviceUserRepository;
+  private final RequestObtainUserRoleInServiceRepository requestObtainUserRoleInServiceRepository;
+  private final ResponseRequestRoleInServiceRepository responseRequestRoleInServiceRepository;
+  private final TypeResponseRequestRoleInServiceRepository typeResponseRequestRoleInServiceRepository;
+
+
+  /**
+   * @param serviceRepository
+   * @param userRepository
+   * @param userRoleInServiceRepository
+   * @param serviceUserRepository
+   * @param requestObtainUserRoleInServiceRepository
+   * @param responseRequestRoleInServiceRepository
+   * @param typeResponseRequestRoleInServiceRepository
+   */
+  public ServiceService(
+      ServiceRepository serviceRepository,
+      UserRepository userRepository,
+      UserRoleInServiceRepository userRoleInServiceRepository,
+      ServiceUserRepository serviceUserRepository,
+      RequestObtainUserRoleInServiceRepository requestObtainUserRoleInServiceRepository,
+      ResponseRequestRoleInServiceRepository responseRequestRoleInServiceRepository,
+      TypeResponseRequestRoleInServiceRepository typeResponseRequestRoleInServiceRepository
+  ) {
+    this.serviceRepository = serviceRepository;
+    this.userRepository = userRepository;
+    this.userRoleInServiceRepository = userRoleInServiceRepository;
+    this.serviceUserRepository = serviceUserRepository;
+    this.requestObtainUserRoleInServiceRepository = requestObtainUserRoleInServiceRepository;
+    this.responseRequestRoleInServiceRepository = responseRequestRoleInServiceRepository;
+    this.typeResponseRequestRoleInServiceRepository = typeResponseRequestRoleInServiceRepository;
+  }
 
 
   /**
@@ -59,6 +77,7 @@ public class ServiceService {
   /**
    * Get list of all services of system
    *
+   * @param currentUserId
    * @return list of DTOs
    */
   public List<sunpp.its.demo.controllers.service.dto.user.ServiceResponseDTO> getServicesViewerList(Integer currentUserId) {
@@ -69,17 +88,17 @@ public class ServiceService {
       boolean isHasAccess;
       String userRoleName;
 
-      if(userInService == null) {
+      if (userInService == null) {
         isHasAccess = false;
         userRoleName = "";
-      }
-      else {
+      } else {
         isHasAccess = true;
         userRoleName = userInService.getUserRole().getRoleName();
       }
 
       var requests = this.requestObtainUserRoleInServiceRepository.findByServiceAndUserCustomerAndIsActive(service, user, true);
-      if(requests.size() > 1) throw new RuntimeException("requestObtainUserRoleInServiceRepository with active status > 1");
+      if (requests.size() > 1)
+        throw new RuntimeException("requestObtainUserRoleInServiceRepository with active status > 1");
       String userRoleNameRequested = requests.size() == 1 ? requests.get(0).getRequestedRole().getRoleName() : "";
 
       String userRoleNameRequestedStatus = "";
@@ -159,6 +178,7 @@ public class ServiceService {
     return responseDTO;
   }
 
+
   /**
    * Update service from updateDTO
    *
@@ -221,13 +241,14 @@ public class ServiceService {
     return responseDTO;
   }
 
+
   /**
    * Delete service
    *
-   * @param id ID of entity
+   * @param serviceId ID of entity
    */
-  public void deleteService(Integer id) {
-    this.serviceRepository.delete(this.serviceRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+  public void deleteService(Integer serviceId) {
+    this.serviceRepository.delete(this.serviceRepository.findById(serviceId).orElseThrow(EntityNotFoundException::new));
   }
 
 
@@ -236,10 +257,10 @@ public class ServiceService {
    *
    * @return
    */
-  public List<UserRoleInServiceResponseDTO> getUserRoleTypes (){
+  public List<UserRoleInServiceResponseDTO> getUserRoleTypes() {
     List<UserRoleInServiceResponseDTO> response = new LinkedList<>();
 
-    for(TypeUserRoleInServiceEntity typeUserRoleInServiceEntity : this.userRoleInServiceRepository.findAll())
+    for (TypeUserRoleInServiceEntity typeUserRoleInServiceEntity : this.userRoleInServiceRepository.findAll())
       response.add(UserRoleInServiceResponseDTO.convertEntityToDTO(typeUserRoleInServiceEntity));
 
     return response;
@@ -247,18 +268,16 @@ public class ServiceService {
 
 
   /**
-   * Get services where user (user_id) has role (role_id)
+   * Get services where user (userId) has role (roleId)
    *
-   * @param user_id ID of user
-   * @param role_id id role of user
+   * @param userId ID of user
+   * @param roleId id role of user
    * @return
    */
-  public List<ServiceResponseDTO> getServicesListByUserAndUserRole(Integer user_id, Integer role_id) {
+  public List<ServiceResponseDTO> getServicesListByUserAndUserRole(Integer userId, Integer roleId) {
     List<ServiceResponseDTO> response = new LinkedList<>();
-//    UserEntity user = this.userRepository.findById(user_id).orElseThrow(EntityNotFoundException::new);
-//    TypeUserRoleInServiceEntity userRole = this.userRoleInServiceRepository.findById(role_id).orElseThrow(EntityNotFoundException::new);
 
-    for (ServiceEntity service : this.serviceRepository.findByUsersAndUserRole(user_id, role_id))
+    for (ServiceEntity service : this.serviceRepository.findByUsersAndUserRole(userId, roleId))
       response.add(ServiceResponseDTO.convertEntityToDTO(service));
     return response;
   }
@@ -280,8 +299,8 @@ public class ServiceService {
     // where there is already an active request for this user,
     // then we prohibit the creation of a new request
     var oldRequests = this.requestObtainUserRoleInServiceRepository.findByServiceAndUserCustomer(service, userCustomer);
-    for(var oldRequest : oldRequests)
-      if(oldRequest.getIsActive())
+    for (var oldRequest : oldRequests)
+      if (oldRequest.getIsActive())
         return;
 
     RequestObtainUserRoleInServiceEntity requestObtainUserRoleInServiceEntity = new RequestObtainUserRoleInServiceEntity();
@@ -310,17 +329,14 @@ public class ServiceService {
     var curUser = this.userRepository.findById(curUserId).orElseThrow(EntityNotFoundException::new);
 
     for (var request : this.requestObtainUserRoleInServiceRepository.findByIsActive(true)) {
-//      if (!request.getIsActive()) continue;
-
-
       // find current logged user in service
       var serviceUsers = request.getService().getUsers().stream().filter(serviceUserEntity ->
           serviceUserEntity.getUser().equals(curUser)
       ).toList();
 
       // checked that the logged in user is not duplicated in the service
-      if(serviceUsers.size() > 1) throw new RuntimeException("The same user cannot be duplicated in the service");
-      else if(serviceUsers.isEmpty()) continue; // logged user absent in the service, then skip request
+      if (serviceUsers.size() > 1) throw new RuntimeException("The same user cannot be duplicated in the service");
+      else if (serviceUsers.isEmpty()) continue; // logged user absent in the service, then skip request
 
       // user role in the service for current logged user
       var curUserRole = serviceUsers.get(0).getUserRole();
@@ -345,18 +361,17 @@ public class ServiceService {
 
           for (var item : responseRequestRoleInService) {
             // did the admin give an access ?
+            var userRoleName = this.serviceUserRepository.findByUserAndService(
+                item.getUser(),
+                request.getService()
+            ).getUserRole().getRoleName();
+
             if (
-                this.serviceUserRepository.findByUserAndService(
-                    item.getUser(),
-                    request.getService()
-                ).getUserRole().getRoleName().equals("admin")
+                userRoleName.equals("admin")
             )
               break;
             else if (
-                this.serviceUserRepository.findByUserAndService(
-                    item.getUser(),
-                    request.getService()
-                ).getUserRole().getRoleName().equals("owner")
+                userRoleName.equals("owner")
                     && item.getTypeResponse().getTypeResponseName().equals("approved")
             ) {
               isAddToView = true;
@@ -366,53 +381,11 @@ public class ServiceService {
           break;
 
         default:
-          throw new IllegalArgumentException("The user's role in the service is not defined");
+          throw new IllegalArgumentException("The user's role in the service is not defined in user role types");
       }
 
-      // {userRoleName, TypeResponseName}
-//      HashMap<String, String> isApproveByUsers = new HashMap<>();
-
-      // find all decisions made by users for this request role
-//      var responsesRequestRole = this.responseRequestRoleInServiceRepository.findByRequest(request);
-//      for(var responseRequestRole : responsesRequestRole) {
-//        isApproveByUsers.put(
-//            curUserRole.getRoleName(),
-//            responseRequestRole.getTypeResponse().getTypeResponseName()
-//        );
-//      }
-
-      // add current request to responseDTO or not ?
-//      boolean isAddToView = false;
-//
-//      // procedure for granting access rights
-//      switch (curUserRole.getRoleName()) {
-//        case "owner":
-//          if (
-//              !isApproveByUsers.containsKey("owner") ||
-//                  (!isApproveByUsers.get("owner").equals("approved") &&
-//                      !isApproveByUsers.get("owner").equals("rejected"))
-//          )
-//            isAddToView = true;
-//          break;
-//
-//        case "admin":
-//          if (
-//              isApproveByUsers.containsKey("owner") &&
-//                  isApproveByUsers.get("owner").equals("approved") &&
-//                  (!isApproveByUsers.containsKey("admin") ||
-//                      (!isApproveByUsers.get("admin").equals("approved") &&
-//                          !isApproveByUsers.get("admin").equals("rejected"))
-//                  )
-//          )
-//            isAddToView = true;
-//          break;
-//
-//        default:
-//          throw new IllegalArgumentException("The user's role in the service is not defined");
-//      } // /switch (curUserRole.getRoleName())
-
       // need to add to DTO
-      if(isAddToView)
+      if (isAddToView)
         responseDTO.add(
             ServiceWaitingAccessResponseDTO.builder()
                 .serviceId(request.getService().getServiceId())
@@ -433,9 +406,9 @@ public class ServiceService {
    * (some user -> |send request role| -> owner -> |yes or no| -> admin -> |yse or no| -> access result)
    *
    * @param serviceId
-   * @param fromUserId user who gives access
-   * @param toUserId user who gets access
-   * @param responseOfUser - possible values: "approved", "rejected"
+   * @param fromUserId     user which gives access
+   * @param toUserId       user which gets access
+   * @param responseOfUser - possible values: ["approved", "rejected"]
    */
   public void sendResponseAccessGrantToService(
       Integer serviceId,
@@ -448,19 +421,14 @@ public class ServiceService {
     var toUser = this.userRepository.findById(toUserId).orElseThrow(EntityNotFoundException::new);
 
     for (var request : this.requestObtainUserRoleInServiceRepository.findByServiceAndUserCustomerAndIsActive(service, toUser, true)) {
-//      if (!request.getIsActive()) continue;
-
-//      request.setIsActive(false);
-//      this.requestObtainUserRoleInServiceRepository.save(request);
-
       // find current logged user in service
       var serviceUsers = request.getService().getUsers().stream().filter(serviceUserEntity ->
           serviceUserEntity.getUser().equals(fromUser)
       ).toList();
 
       // checked that the logged in user is not duplicated in the service
-      if(serviceUsers.size() > 1) throw new RuntimeException("The same user cannot be duplicated in the service");
-      else if(serviceUsers.isEmpty()) continue; // logged user absent in the service, then skip request
+      if (serviceUsers.size() > 1) throw new RuntimeException("The same user cannot be duplicated in the service");
+      else if (serviceUsers.isEmpty()) continue; // logged user absent in the service, then skip request
 
       // user role in the service for current logged user
       var fromUserRole = serviceUsers.get(0).getUserRole();
@@ -476,31 +444,30 @@ public class ServiceService {
       switch (fromUserRole.getRoleName()) {
         case "owner":
           // if owner give access then send request to admin
-          if(responseOfUser.getTypeResponseName().equals("approved")) {
+          if (responseOfUser.getTypeResponseName().equals("approved")) {
             this.createRequestObtainUserRoleInService(
                 request.getService().getServiceId(),
                 request.getUserCustomer().getUserId(),
                 request.getRequestedRole().getRoleId()
             );
           }
-          if(responseOfUser.getTypeResponseName().equals("rejected")) {
+          else if (responseOfUser.getTypeResponseName().equals("rejected")) {
             request.setIsActive(false);
             this.requestObtainUserRoleInServiceRepository.save(request);
           }
           break;
 
         case "admin":
-          if(responseOfUser.getTypeResponseName().equals("approved")) {
+          if (responseOfUser.getTypeResponseName().equals("approved")) {
             var userInServiceFinded = this.serviceUserRepository.findByUserAndService(toUser, service);
-            if(userInServiceFinded == null) {
-              // the user does not exists in the service, so just create new withrole
+            if (userInServiceFinded == null) {
+              // the user does not exists in the service, so just create new with role
               ServiceUserEntity userInService = new ServiceUserEntity();
               userInService.setUser(toUser);
               userInService.setUserRole(request.getRequestedRole());
               userInService.setService(service);
               this.serviceUserRepository.save(userInService);
-            }
-            else {
+            } else {
               // the user exists in the service, so just update his role
               userInServiceFinded.setUserRole(request.getRequestedRole());
               this.serviceUserRepository.save(userInServiceFinded);
@@ -527,9 +494,9 @@ public class ServiceService {
   public List<HistoryRequestAccessResponseDTO> loadRequestsHistory(Integer serviceId) {
     List<HistoryRequestAccessResponseDTO> responseDTO = new LinkedList<>();
 
-    for(var respReqRole : this.responseRequestRoleInServiceRepository.findAll()) {
+    for (var respReqRole : this.responseRequestRoleInServiceRepository.findAll()) {
       var request = respReqRole.getRequest();
-      if(!Objects.equals(request.getService().getServiceId(), serviceId)) continue;
+      if (!Objects.equals(request.getService().getServiceId(), serviceId)) continue;
 
       responseDTO.add(
           HistoryRequestAccessResponseDTO.builder()
